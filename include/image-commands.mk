@@ -382,12 +382,14 @@ endef
 
 define Build/gzip
 	$(STAGING_DIR_HOST)/bin/gzip -f -9n -c $@ $(1) > $@.new
-	@mv $@.new $@
+	mv $@ $(basename $@)
+	mv $@.new $@
 endef
 
 define Build/zstd
 	zstd -T0 -c $@ $(1) > $@.new
-	@mv $@.new $@
+	mv $@ $(basename $@)
+	mv $@.new $@
 endef
 
 define Build/gzip-filename
