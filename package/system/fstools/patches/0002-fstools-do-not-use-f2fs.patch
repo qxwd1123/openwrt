@@ -1,0 +1,24 @@
+--- a/libfstools/common.c
++++ b/libfstools/common.c
+@@ -95,20 +95,7 @@
+
+ static bool use_f2fs(struct volume *v, uint64_t offset, const char *bdev)
+ {
+-	uint64_t size = 0;
+-	bool ret = false;
+-	int fd;
+-
+-	fd = open(bdev, O_RDONLY);
+-	if (fd < 0)
+-		return false;
+-
+-	if (ioctl(fd, BLKGETSIZE64, &size) == 0)
+-		ret = size - offset > F2FS_MINSIZE;
+-
+-	close(fd);
+-
+-	return ret;
++	return false;
+ }
+
+ int block_volume_format(struct volume *v, uint64_t offset, const char *bdev) 

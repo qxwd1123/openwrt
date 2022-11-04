@@ -37,14 +37,29 @@ platform_check_image() {
 }
 
 platform_copy_config() {
-	local partdev parttype=ext4
-
-	if export_partdevice partdev 1; then
-		part_magic_fat "/dev/$partdev" && parttype=vfat
-		mount -t $parttype -o rw,noatime "/dev/$partdev" /mnt
-		cp -af "$UPGRADE_BACKUP" "/mnt/$BACKUP_FILE"
-		umount /mnt
-	fi
+	exec >/dev/tty0 2>/dev/tty0
+	set -x
+	[ -f /tmp/sysupgrade.tgz ] && {
+		mkdir /tmp/rom -p
+		mkdir /tmp/overlay -p
+		mkdir /tmp/root -p
+		hex=$(hexdump -e '8/1 "%02x ""\n"' -n 8 -s 40 /dev/sda2 | awk '{printf "0x";for(i=NF;i>2;i--)printf $i;print "0000"}')
+		offset=$(printf "0x%x" $(expr $(printf "%d" $hex) + 65536))
+		overlay_loop=$(losetup --show --offset ${offset} --find /dev/sda2)
+		mkfs.ext4 -q -L rootfs_data ${overlay_loop}
+		mount /dev/sda2 /tmp/rom
+		mount ${overlay_loop} /tmp/overlay
+		mkdir /tmp/overlay/upper
+		mkdir /tmp/overlay/work
+		ln -s 2 /tmp/overlay/.fs_state
+		mount /tmp/overlay -t overlay -n -o rw,noatime,lowerdir=/tmp/rom,upperdir=/tmp/overlay/upper,workdir=/tmp/overlay/work /tmp/root
+		tar xzf /tmp/sysupgrade.tgz -C /tmp/root
+		tar xf /tmp/sysupgrade.tar -C /tmp
+		sync
+		umount /tmp/root
+		umount /tmp/overlay
+		losetup -d ${overlay_loop}
+	}
 }
 
 platform_do_bootloader_upgrade() {

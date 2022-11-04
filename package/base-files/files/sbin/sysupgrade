@@ -72,8 +72,7 @@ upgrade-option:
 	-f <config>  restore configuration from .tar.gz (file or url)
 	-i           interactive mode
 	-c           attempt to preserve all changed files in /etc/
-	-o           attempt to preserve all changed files in /, except those
-	             from packages but including changed confs.
+	-o           attempt to preserve all changed files in /
 	-u           skip from backup files that are equal to those in /rom
 	-n           do not save configuration over reflash
 	-p           do not attempt to restore the partition table after flash.
@@ -150,7 +149,7 @@ list_changed_conffiles() {
 list_static_conffiles() {
 	local filter=$1
 
-	find $(sed -ne '/^[[:space:]]*$/d; /^#/d; p' \
+	find $(sed -ne '/^[[:space:]]*$/d; /^#/d; /^\/$/d; p' \
 		/etc/sysupgrade.conf /lib/upgrade/keep.d/* 2>/dev/null) \
 		\( -type f -o -type l \) $filter 2>/dev/null
 }
@@ -166,39 +165,6 @@ build_list_of_backup_config_files() {
 build_list_of_backup_overlay_files() {
 	local file="$1"
 
-	local packagesfiles=$1.packagesfiles
-	touch "$packagesfiles"
-
-	if [ "$SAVE_OVERLAY_PATH" = / ]; then
-		local conffiles=$1.conffiles
-		local keepfiles=$1.keepfiles
-
-		list_conffiles | cut -f2 -d ' ' | sort -u > "$conffiles"
-
-		# backup files from /etc/sysupgrade.conf and /lib/upgrade/keep.d, but
-		# ignore those aready controlled by opkg conffiles
-		list_static_conffiles | sort -u |
-			grep -h -v -x -F -f $conffiles > "$keepfiles"
-
-		# backup conffiles, but only those changed if '-u'
-		[ $SKIP_UNCHANGED = 1 ] &&
-			list_changed_conffiles | sort -u > "$conffiles"
-
-		# do not backup files from packages, except those listed
-		# in conffiles and keep.d
-		{
-			find /usr/lib/opkg/info -type f -name "*.list" -exec cat {} \;
-			find /usr/lib/opkg/info -type f -name "*.control" -exec sed \
-				-ne '/^Alternatives/{s/^Alternatives: //;s/, /\n/g;p}' {} \; |
-				cut -f2 -d:
-		} |  grep -v -x -F -f $conffiles |
-		     grep -v -x -F -f $keepfiles | sort -u > "$packagesfiles"
-		rm -f "$keepfiles" "$conffiles"
-	fi
-
-	# busybox grep bug when file is empty
-	[ -s "$packagesfiles" ] || echo > $packagesfiles
-
 	( cd /overlay/upper/; find .$SAVE_OVERLAY_PATH \( -type f -o -type l \) $find_filter | sed \
 		-e 's,^\.,,' \
 		-e '\,^/etc/board.json$,d' \
@@ -206,9 +172,7 @@ build_list_of_backup_overlay_files() {
 		-e '\,^/etc/urandom.seed$,d' \
 		-e "\,^$INSTALLED_PACKAGES$,d" \
 		-e '\,^/usr/lib/opkg/.*,d' \
-	) | grep -v -x -F -f $packagesfiles > "$file"
-
-	rm -f "$packagesfiles"
+	) > "$file"
 
 	return 0
 }
@@ -245,7 +209,7 @@ create_backup_archive() {
 		return 0
 	}
 	run_hooks "$CONFFILES" $sysupgrade_init_conffiles
-	ask_bool 0 "Edit config file list" && vi "$CONFFILES"
+	ask_bool 0 "Edit config file list" && vim "$CONFFILES"
 
 	[ "$conf_tar" != "-" ] || conf_tar=""
 
@@ -292,6 +256,12 @@ create_backup_archive() {
 	if [ "$err" -ne 0 ]; then
 		echo "Failed to create the configuration backup."
 		[ -f "$conf_tar" ] && rm -f "$conf_tar"
+	fi
+	find /overlay/upper -type c -exec tar -rvf /tmp/sysupgrade.tar {} \;
+	local err=$?
+	if [ "$err" -ne 0 ]; then
+		echo "Failed to create the configuration backup."
+		rm -f /tmp/sysupgrade.tar
 	fi
 
 	rm -f "$CONFFILES"
