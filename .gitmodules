@@ -1,0 +1,14 @@
+[submodule "package/sub/luci-app-mentohust"]
+	path = package/sub/luci-app-mentohust
+	url = https://github.com/BoringCat/luci-app-mentohust
+	branch = master
+[submodule "package/sub/luci-app-poweroff"]
+	path = package/sub/luci-app-poweroff
+	url = https://github.com/esirplayground/luci-app-poweroff
+	branch = master
+[submodule "package/sub/luci-app-ttnode"]
+	path = package/sub/luci-app-ttnode
+	url = https://github.com/jerrykuku/luci-app-ttnode
+	branch = master
+[submodule "package.sub.luci-app-clash"]
+	ignore = untracked
