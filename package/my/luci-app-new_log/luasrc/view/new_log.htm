@@ -1,0 +1,63 @@
+﻿<%+header%>
+
+<script type="text/javascript">//<![CDATA[
+
+	timer = 8000;
+	var filter=false;
+	var iwxhr = new XHR();
+	
+	function read_output(click){
+		btn_refresh=document.getElementById('refresh');
+		if(!btn_refresh.checked && click!=1){
+			setTimeout("read_output()",timer);
+			return
+		}
+		
+		//add parameter to filter useless log
+		iwxhr.get('<%=luci.dispatcher.build_url("admin", "status", "read_log")%>', {cmd: document.getElementById("cmd").value},
+			function(x, ifc)
+			{
+				obj = document.getElementById("syslog");
+				var arr = ifc[0].split("\n");
+				var new_arr = [];
+				var len = arr.length;
+				var j=0;
+				var v=document.getElementById("cmd").value;
+				if(v){var v=new RegExp(v)}else{filter=false};
+				for (i=0;i<len;i++){
+					var item = arr[len-i-1];
+					if(!filter || (v && v.test(item))){
+						new_arr[j]=item;
+						j++;
+					}
+				}
+				new_log=new_arr.join("\n");
+					
+				obj.setAttribute("rows",new_arr.length+2);
+				obj.value=new_log;
+				obj.scrollTop = 0;//obj.scrollHeight;
+				setTimeout("read_output()",timer);
+			}
+		)
+
+
+	}
+	function update_status(e){
+		if(e!=null && e.keyCode!=13) return false;
+		filter=true
+		read_output()
+	}
+
+//]]></script>
+
+<input type="button" onclick="update_status()" value="输入过滤" />
+<input type="button" onclick="read_output(1)" value="更新" />
+<input type="text" id="cmd" onkeypress="update_status(event)" value="cron" />
+<input type="checkbox" id="refresh" value="refresh" checked="true" />自动刷新<br />
+<textarea readonly="readonly" wrap="off" rows="180" id="syslog"></textarea>
+
+<script>
+//by dirtyacc
+read_output()
+</script>
+<%+footer%>
