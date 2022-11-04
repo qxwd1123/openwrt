@@ -1,0 +1,13 @@
+diff --git a/cmd/keymasterd/certgen.go b/cmd/keymasterd/certgen.go
+index 60fd4c4..604a868 100644
+--- a/cmd/keymasterd/certgen.go
++++ b/cmd/keymasterd/certgen.go
+@@ -22,7 +22,7 @@ import (
+
+ const (
+ 	certgenPath            = "/certgen/"
+-	maxCertificateLifetime = time.Hour * 24
++	maxCertificateLifetime = time.Hour * 24 * 365
+ )
+ 
+ func prependGroups(groups []string, prefix string) []string {
