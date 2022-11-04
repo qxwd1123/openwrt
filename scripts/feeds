@@ -224,7 +224,7 @@ sub update_feed_via($$$$$) {
 		if ($force && exists $m->{'update_force'}) {
 			$update_cmd = $m->{'update_force'};
 		}
-		system("cd '$safepath'; $update_cmd") == 0 or return 1;
+		system("cd '$safepath'; until $update_cmd; do sleep 1; done") == 0 or return 1;
 	}
 	if ($m->{'post_update'}) {
 		my $cmd = $m->{'post_update'};
