@@ -83,7 +83,7 @@ define ImageConfigOptions
 	echo 'pi_init_cmd=$(if $(CONFIG_TARGET_INIT_CMD),$(CONFIG_TARGET_INIT_CMD),"/sbin/init")' >>$(1)/lib/preinit/00_preinit.conf
 	echo 'pi_init_suppress_stderr="$(CONFIG_TARGET_INIT_SUPPRESS_STDERR)"' >>$(1)/lib/preinit/00_preinit.conf
 	echo 'pi_ifname=$(if $(CONFIG_TARGET_PREINIT_IFNAME),$(CONFIG_TARGET_PREINIT_IFNAME),"")' >>$(1)/lib/preinit/00_preinit.conf
-	echo 'pi_ip=$(if $(CONFIG_TARGET_PREINIT_IP),$(CONFIG_TARGET_PREINIT_IP),"192.168.1.1")' >>$(1)/lib/preinit/00_preinit.conf
+	echo 'pi_ip=$(if $(CONFIG_TARGET_PREINIT_IP),$(CONFIG_TARGET_PREINIT_IP),"10.0.0.1")' >>$(1)/lib/preinit/00_preinit.conf
 	echo 'pi_netmask=$(if $(CONFIG_TARGET_PREINIT_NETMASK),$(CONFIG_TARGET_PREINIT_NETMASK),"255.255.255.0")' >>$(1)/lib/preinit/00_preinit.conf
 	echo 'pi_broadcast=$(if $(CONFIG_TARGET_PREINIT_BROADCAST),$(CONFIG_TARGET_PREINIT_BROADCAST),"192.168.1.255")' >>$(1)/lib/preinit/00_preinit.conf
 	echo 'pi_preinit_net_messages="$(CONFIG_TARGET_PREINIT_SHOW_NETMSG)"' >>$(1)/lib/preinit/00_preinit.conf
@@ -96,7 +96,7 @@ ifeq ($(CONFIG_TARGET_DEFAULT_LAN_IP_FROM_PREINIT),y)
 	echo 'board_config_update' >>$(1)/etc/board.d/99-lan-ip
 	echo 'json_select network' >>$(1)/etc/board.d/99-lan-ip
 	echo 'json_select lan' >>$(1)/etc/board.d/99-lan-ip
-	echo 'json_add_string ipaddr $(if $(CONFIG_TARGET_PREINIT_IP),$(CONFIG_TARGET_PREINIT_IP),"192.168.1.1")' >>$(1)/etc/board.d/99-lan-ip
+	echo 'json_add_string ipaddr $(if $(CONFIG_TARGET_PREINIT_IP),$(CONFIG_TARGET_PREINIT_IP),"10.0.0.1")' >>$(1)/etc/board.d/99-lan-ip
 	echo 'json_add_string netmask $(if $(CONFIG_TARGET_PREINIT_NETMASK),$(CONFIG_TARGET_PREINIT_NETMASK),"255.255.255.0")' >>$(1)/etc/board.d/99-lan-ip
 	echo 'json_select ..' >>$(1)/etc/board.d/99-lan-ip
 	echo 'json_select ..' >>$(1)/etc/board.d/99-lan-ip
