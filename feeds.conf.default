@@ -1,8 +1,20 @@
-src-git packages https://git.openwrt.org/feed/packages.git
-src-git luci https://git.openwrt.org/project/luci.git
-src-git routing https://git.openwrt.org/feed/routing.git
-src-git telephony https://git.openwrt.org/feed/telephony.git
-#src-git video https://github.com/openwrt/video.git
-#src-git targets https://github.com/openwrt/targets.git
-#src-git oldpackages http://git.openwrt.org/packages.git
+src-link kenzo /home/a/wrt/feeds/kenzok8-openwrt-packages
+src-link small /home/a/wrt/feeds/kenzok8-small
+src-link helloworld /home/a/wrt/feeds/fw876-helloworld
+src-link jerryk /home/a/wrt/feeds/jerrykuku-openwrt-package
+src-link opentopd /home/a/wrt/feeds/sirpdboy-sirpdboy-package
+src-link xiaorouji /home/a/wrt/feeds/xiaorouji-openwrt-passwall
+src-link n2n /home/a/wrt/feeds/alecthw-openwrt-n2n
+src-link oaf /home/a/wrt/feeds/destan19-OpenAppFilter
+src-link iptvhelper /home/a/wrt/feeds/riverscn-openwrt-iptvhelper
+src-link subconverter /home/a/wrt/feeds/tindy2013-openwrt-subconverter
+
+src-link packages /home/a/wrt/feeds/immortalwrt-packages
+src-link luci /home/a/wrt/feeds/immortalwrt-luci
+src-link routing /home/a/wrt/feeds/openwrt-routing
+src-link telephony /home/a/wrt/feeds/openwrt-telephony
+#src-git video https://github.com/openwrt/video
+#src-git targets https://github.com/openwrt/targets
+#src-git oldpackages http://git.openwrt.org/packages
 #src-link custom /usr/src/openwrt/custom-feed
+
