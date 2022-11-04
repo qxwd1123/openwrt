@@ -285,6 +285,11 @@ menu "Target Images"
 		depends on TARGET_ROOTFS_EXT4FS || TARGET_x86 || TARGET_armsr || TARGET_malta || TARGET_loongarch64
 		default y
 
+	config TARGET_IMAGES_ZSTD
+		bool "Zstd images"
+		depends on !TARGET_IMAGES_GZIP && (TARGET_ROOTFS_EXT4FS || TARGET_x86 || TARGET_armvirt || TARGET_malta)
+		default n
+
 	comment "Image Options"
 
 	source "target/linux/*/image/Config.in"

@@ -385,6 +385,11 @@ define Build/gzip
 	@mv $@.new $@
 endef
 
+define Build/zstd
+	zstd -T0 -c $@ $(1) > $@.new
+	@mv $@.new $@
+endef
+
 define Build/gzip-filename
 	@mkdir -p $@.tmp
 	@cp $@ $@.tmp/$(word 1,$(1))
