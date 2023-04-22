@@ -6,9 +6,16 @@ __package_mk:=1
 
 all: $(if $(DUMP),dumpinfo,$(if $(CHECK),check,compile))
 
+ifndef PKG_SOURCE_VERSION
+  ifeq ($(PKG_SOURCE_URL_FILE),)
+    PKG_SOURCE_URL_FILE:=$(PKG_SOURCE)
+  	PKG_SOURCE:=$(subst -$(PKG_VERSION),,$(subst _$(PKG_VERSION),,$(PKG_SOURCE)))
+  endif
+endif
+
 include $(INCLUDE_DIR)/download.mk
 
-PKG_BUILD_DIR ?= $(BUILD_DIR)/$(if $(BUILD_VARIANT),$(PKG_NAME)-$(BUILD_VARIANT)/)$(PKG_NAME)$(if $(PKG_VERSION),-$(PKG_VERSION))
+PKG_BUILD_DIR ?= $(BUILD_DIR)/$(if $(BUILD_VARIANT),$(PKG_NAME)-$(BUILD_VARIANT)/)$(PKG_NAME)
 PKG_INSTALL_DIR ?= $(PKG_BUILD_DIR)/ipkg-install
 PKG_BUILD_PARALLEL ?=
 PKG_SKIP_DOWNLOAD=$(USE_SOURCE_DIR)$(USE_GIT_TREE)$(USE_GIT_SRC_CHECKOUT)

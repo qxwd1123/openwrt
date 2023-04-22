@@ -2,9 +2,16 @@
 #
 # Copyright (C) 2006-2020 OpenWrt.org
 
+ifndef PKG_SOURCE_VERSION
+  ifeq ($(PKG_SOURCE_URL_FILE),)
+    PKG_SOURCE_URL_FILE:=$(PKG_SOURCE)
+  	PKG_SOURCE:=$(subst -$(PKG_VERSION),,$(subst _$(PKG_VERSION),,$(PKG_SOURCE)))
+  endif
+endif
+
 include $(INCLUDE_DIR)/download.mk
 
-HOST_BUILD_DIR ?= $(BUILD_DIR_HOST)/$(PKG_NAME)$(if $(PKG_VERSION),-$(PKG_VERSION))
+HOST_BUILD_DIR ?= $(BUILD_DIR_HOST)/$(PKG_NAME)
 HOST_INSTALL_DIR ?= $(HOST_BUILD_DIR)/host-install
 HOST_BUILD_PARALLEL ?=
 
@@ -206,10 +213,10 @@ ifndef DUMP
 endif
 
 define HostBuild
-  $(HostBuild/Core)
   $(if $(if $(PKG_HOST_ONLY),,$(if $(and $(filter host-%,$(MAKECMDGOALS)),$(PKG_SKIP_DOWNLOAD)),,$(STAMP_PREPARED))),,
 	$(if $(and $(CONFIG_AUTOREMOVE), $(wildcard $(HOST_STAMP_INSTALLED), $(wildcard $(HOST_STAMP_BUILT)))),,
 		$(if $(strip $(PKG_SOURCE_URL)),$(call Download,default))
 	)
   )
+  $(HostBuild/Core)
 endef

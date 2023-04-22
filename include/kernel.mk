@@ -57,9 +57,11 @@ else
   LINUX_KERNEL:=$(KERNEL_BUILD_DIR)/vmlinux
 
   ifneq (,$(findstring -rc,$(LINUX_VERSION)))
-      LINUX_SOURCE:=linux-$(LINUX_VERSION).tar.gz
+      LINUX_SOURCE:=linux.tar.gz
+      LINUX_SOURCE_URL_FILE:=linux-$(LINUX_VERSION).tar.gz
   else
-      LINUX_SOURCE:=linux-$(LINUX_VERSION).tar.xz
+      LINUX_SOURCE:=linux.tar.xz
+      LINUX_SOURCE_URL_FILE:=linux-$(LINUX_VERSION).tar.xz
   endif
 
   ifneq (,$(findstring -rc,$(LINUX_VERSION)))

@@ -14,7 +14,7 @@ PKG_RELEASE:=1
 PKG_SOURCE:=intel-microcode_3.$(PKG_VERSION).1.tar.xz
 PKG_SOURCE_URL:=@DEBIAN/pool/non-free-firmware/i/intel-microcode/
 PKG_HASH:=25f53bab1bf0c84aba927a77a97a9f1147c94199fa95b5187d874f839f022808
-PKG_BUILD_DIR:=$(BUILD_DIR)/intel-microcode-3.$(PKG_VERSION).1
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 PKG_CPE_ID:=cpe:/a:intel:microcode
 
 PKG_BUILD_DEPENDS:=iucode-tool/host

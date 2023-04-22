@@ -11,7 +11,7 @@ PKG_NAME:=ltq-adsl-fw
 PKG_VERSION:=0.1
 PKG_RELEASE:=1
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/ltq-dsl-fw-$(PKG_VERSION)
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 PKG_SOURCE:=ltq-dsl-fw-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=https://sources.openwrt.org/
 PKG_HASH:=28676d41c4b76e5bf7a2c5eae106a61fb96b93eabc0cb71120575fff9997269f

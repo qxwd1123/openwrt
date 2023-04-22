@@ -40,6 +40,7 @@ endef
 define Download/kernel
   URL:=$(LINUX_SITE)
   FILE:=$(LINUX_SOURCE)
+  URL_FILE:=$(LINUX_SOURCE_URL_FILE)
   HASH:=$(LINUX_KERNEL_HASH)
 endef
 
@@ -53,6 +54,7 @@ define Download/git-kernel
   PROTO:=git
   VERSION:=$(CONFIG_KERNEL_GIT_REF)
   FILE:=$(LINUX_SOURCE)
+  URL_FILE:=$(LINUX_SOURCE_URL_FILE)
   SUBDIR:=linux-$(LINUX_VERSION)
   OPTS:=$(KERNEL_GIT_OPTS)
 endef

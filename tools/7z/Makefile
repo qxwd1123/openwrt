@@ -13,7 +13,7 @@ PKG_CPE_ID:=cpe:/a:7-zip:7zip
 PKG_LICENSE:=LGPL-2.1-or-later
 PKG_LICENSE_FILES:=DOC/License.txt DOC/copying.txt
 
-HOST_BUILD_DIR:=$(BUILD_DIR_HOST)/$(PKG_NAME)-$(PKG_VERSION)
+HOST_BUILD_DIR:=$(BUILD_DIR_HOST)/$(PKG_NAME)
 
 include $(INCLUDE_DIR)/host-build.mk
 
