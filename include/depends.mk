@@ -11,7 +11,8 @@
 
 DEP_FINDPARAMS := -x "*/.svn*" -x ".*" -x "*:*" -x "*\!*" -x "* *" -x "*\\\#*" -x "*/.*_check" -x "*/.*.swp" -x "*/.pkgdir*"
 
-find_md5=find $(wildcard $(1)) -type f $(patsubst -x,-and -not -path,$(DEP_FINDPARAMS) $(2)) -printf "%p%T@\n" | sort | $(MKHASH) md5
+# find_md5=find $(wildcard $(1)) -type f $(patsubst -x,-and -not -path,$(DEP_FINDPARAMS) $(2)) -printf "%p%T@\n" | sort | $(MKHASH) md5
+find_md5=find $(wildcard $(1)) -type f $(patsubst -x,-and -not -path,$(DEP_FINDPARAMS) $(2)) -print0 | xargs -0 $(MKHASH) md5 | sort | $(MKHASH) md5
 find_md5_reproducible=find $(wildcard $(1)) -type f $(patsubst -x,-and -not -path,$(DEP_FINDPARAMS) $(2)) -print0 | xargs -0 $(MKHASH) md5 | sort | $(MKHASH) md5
 
 define rdep
@@ -29,10 +30,8 @@ ifneq ($(wildcard $(2)),)
 	) \
 	{ \
 		[ -f "$(2)_check.1" ] && mv "$(2)_check.1" "$(2)_check"; \
-	    $(TOPDIR)/scripts/timestamp.pl $(DEP_FINDPARAMS) $(4) -n $(2) $(1) && { \
-			$(call debug_eval,$(SUBDIR),r,echo "No need to rebuild $(2)";) \
-			touch -r "$(2)" "$(2)_check"; \
-		} \
+		$(call debug_eval,$(SUBDIR),r,echo "No need to rebuild $(2)";) \
+		touch -r "$(2)" "$(2)_check"; \
 	} || { \
 		$(call debug_eval,$(SUBDIR),r,echo "Need to rebuild $(2)";) \
 		touch "$(2)_check"; \

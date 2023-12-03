@@ -27,7 +27,7 @@ empty:=
 space:= $(empty) $(empty)
 comma:=,
 merge=$(subst $(space),,$(1))
-confvar=$(shell echo '$(foreach v,$(1),$(v)=$(subst ','\'',$($(v))))' | $(MKHASH) md5)
+confvar=$(shell echo '$(foreach v,$(1),$(v)=$(subst ','\'',$($(v))))' | sort | $(MKHASH) md5)
 strip_last=$(patsubst %.$(lastword $(subst .,$(space),$(1))),%,$(1))
 
 paren_left = (
