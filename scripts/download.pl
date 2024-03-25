@@ -107,7 +107,7 @@ sub download_cmd {
 	my $filename = shift;
 
 	if ($download_tool eq "curl") {
-		return (qw(curl -f --connect-timeout 20 --retry 5 --location),
+		return (qw(curl -f --connect-timeout 20 --retry 5 --retry-all-errors --location),
 			$check_certificate ? () : '--insecure',
 			shellwords($ENV{CURL_OPTIONS} || ''),
 			$url);
