@@ -195,23 +195,19 @@ define DownloadMethod/svn
 endef
 
 define DownloadMethod/git
-	$(call wrap_mirror,$(1),$(2), \
-		$(call DownloadMethod/rawgit) \
-	)
+	$(call DownloadMethod/rawgit)
 endef
 
 define DownloadMethod/github_archive
-	$(call wrap_mirror,$(1),$(2), \
-		$(SCRIPT_DIR)/dl_github_archive.py \
-			--dl-dir="$(DL_DIR)" \
-			--url="$(URL)" \
-			--version="$(SOURCE_VERSION)" \
-			--subdir="$(SUBDIR)" \
-			--source="$(FILE)" \
-			--hash="$(MIRROR_HASH)" \
-			--submodules $(SUBMODULES) \
-		|| ( $(call DownloadMethod/rawgit) ); \
-	)
+	$(SCRIPT_DIR)/dl_github_archive.py \
+		--dl-dir="$(DL_DIR)" \
+		--url="$(URL)" \
+		--version="$(SOURCE_VERSION)" \
+		--subdir="$(SUBDIR)" \
+		--source="$(FILE)" \
+		--hash="$(MIRROR_HASH)" \
+		--submodules $(SUBMODULES) \
+	|| ( $(call DownloadMethod/rawgit) )
 endef
 
 # Only intends to be called as a submethod from other DownloadMethod
