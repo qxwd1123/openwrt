@@ -70,7 +70,7 @@ gen_sha256sum = $(shell $(MKHASH) sha256 $(DL_DIR)/$(1))
 # match, so that the download can be more thoroughly handled by download.pl.
 define check_download_integrity
   expected_hash:=$(strip $(if $(filter-out x,$(HASH)),$(HASH),$(MIRROR_HASH)))
-  $$(if $$(and $(FILE),$$(wildcard $(DL_DIR)/$(FILE)), \
+  $$(if $$(and $$(expected_hash),$(FILE),$$(wildcard $(DL_DIR)/$(FILE)), \
 	       $$(filter undefined,$$(flavor DownloadChecked/$(FILE)))), \
     $$(eval DownloadChecked/$(FILE):=1) \
     $$(if $$(filter-out $$(call gen_sha256sum,$(FILE)),$$(expected_hash)), \
